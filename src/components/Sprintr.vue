@@ -49,12 +49,12 @@ export default {
   },
   methods: {
     countdownToSprint: function() {
+      var now = new Date();
+      this.timeTillSprint = Math.floor((this.sprintStartTime - now) / 1000);
       if (this.timeTillSprint >= 1) {
-        this.timeTillSprint--;
       } else {
         this.timeTillSprint = 0;
         clearInterval(this.timer);
-        var now = new Date();
         if (now < this.sprintEndTime && (this.playSound === "true")) {
           var playPromise = this.startAudio.play();
           if (playPromise !== null) {
@@ -64,12 +64,13 @@ export default {
           }
         }
         this.sprintTime = Math.floor((this.sprintEndTime - now) / 1000);
-        this.sprintTimer = setInterval(() => this.sprintCountDown(), 1000);
+        this.sprintTimer = setInterval(() => this.sprintCountDown(), 500);
       }
     },
     sprintCountDown: function() {
+      var now = new Date();
+      this.sprintTime = Math.floor((this.sprintEndTime - now) / 1000);
       if (this.sprintTime >= 1) {
-        this.sprintTime--;
       } else {
         this.sprintTime = 0;
         clearInterval(this.sprintTimer);
@@ -90,7 +91,7 @@ export default {
           }
         }
         this.timeTillSprint = Math.floor((this.sprintStartTime - now) / 1000);
-        this.timer = setInterval(() => this.countdownToSprint(), 1000);
+        this.timer = setInterval(() => this.countdownToSprint(), 500);
       }
     },
     padTime: function(time) {
