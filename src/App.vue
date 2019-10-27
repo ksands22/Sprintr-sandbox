@@ -1,17 +1,18 @@
 <template>
   <div id="app">
+    <h1>Welcome to the Words After Dark Word Sprint Tool!</h1>
     <img width="25%" src="./assets/logo.png">
-    <HelloWorld msg="Hello Vue in CodeSandbox!" />
+    <Sprintr/>
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld";
+import Sprintr from "./components/Sprintr";
 
 export default {
   name: "App",
   components: {
-    HelloWorld
+    Sprintr
   }
 };
 </script>
