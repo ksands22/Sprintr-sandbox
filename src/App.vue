@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <h1>Welcome to the Words After Dark Word Sprint Tool!</h1>
-    <img width="25%" src="./assets/logo.png">
+    <a href="https://words-after-dark.square.site"><img width="25%" src="./assets/logo.png"></a>
     <Sprintr/>
   </div>
 </template>

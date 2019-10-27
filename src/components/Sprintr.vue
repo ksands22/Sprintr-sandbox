@@ -19,6 +19,9 @@
     <template v-else>
       <h3>Loading...</h3>
     </template>
+    <br/>
+    <br/>
+    <span style="font-size:xx-small">Made with love by Ace of the <a href="https://facebook.com/WordsAfterDark">Words After Dark</a> crew.</span>
   </div>
 </template>
 
