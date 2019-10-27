@@ -8,19 +8,13 @@
       <h3>Let the words flow!</h3>
       <h1>{{ sprintMinutes }}:{{ sprintSeconds }}</h1>
     </template>
-    <template v-else-if="noSprint = 1">
-      <div>Create a sprint with url arguments!</div>
-      <br>
-      <div>For example, this link will create a sprint with
-        <b>sound enabled</b> that
-        <b>starts at 13:30</b> and
-        <b>lasts 10 minutes</b> and
-        <b>repeats every 15 minutes</b>:
-      </div>
-      <a
-        href="https://word-sprint.net?hour=13&minute=30&duration=10&break=15&sound=1"
-      >https://word-sprint.net?<b>hour=13</b>&<b>minute=30</b>&<b>duration=10</b>&<b>break=15</b>&<b>sound=1</b>
-      </a>
+    <template v-else-if="noSprint === 1">
+      <h3>Create a sprint!</h3>
+      <div>I want a sprint that starts at <input v-model="desiredHour" type=number min=0 max=23 style="width:35px"></input>:<input v-model="desiredMinute" type=number min=0 max=60 style="width:35px"></input></div>
+      <div>And has a duration of <input v-model="desiredDuration" type=number min=1 style="width:35px"></input> minutes.</div>
+      <div>After the sprint, there will be a <input v-model="desiredBreak" type=number min=1 style="width:35px"></input> minute break after which the sprint will repeat.</div>
+      <div>Enable start/stop sounds? <input v-model="desiredSound" type=checkbox></input></div>
+      <button v-on:click="getSprint">Go!</button>
     </template>
     <template v-else>
       <h3>Loading...</h3>
@@ -44,7 +38,13 @@ export default {
       startAudio: null,
       endAudio: null,
       playSound: 0,
-      noSprint: 0
+      noSprint: 0,
+      desiredHour: 0,
+      desiredMinute: 0,
+      desiredDuration: 0,
+      desiredBreak: 0,
+      desiredSound: 0,
+      customUrl: null
     };
   },
   methods: {
@@ -55,7 +55,7 @@ export default {
         this.timeTillSprint = 0;
         clearInterval(this.timer);
         var now = new Date();
-        if (now < this.sprintEndTime && this.playSound) {
+        if (now < this.sprintEndTime && this.playSound === 1) {
           var playPromise = this.startAudio.play();
           if (playPromise !== null) {
             playPromise.catch(() => {
@@ -81,7 +81,7 @@ export default {
           this.sprintStartTime.getTime() + this.Duration * 60000
         );
         var now = new Date();
-        if (now < this.sprintEndTime && this.playSound) {
+        if (now < this.sprintEndTime && this.playSound === 1) {
           var playPromise = this.endAudio.play();
           if (playPromise !== null) {
             playPromise.catch(() => {
@@ -95,6 +95,9 @@ export default {
     },
     padTime: function(time) {
       return (time < 10 ? "0" : "") + time;
+    },
+    getSprint: function() {
+      window.location.href = "https://word-sprint.net?hour=" + this.desiredHour + "&minute=" + this.desiredMinute + "&duration=" + this.desiredDuration + "&break=" + this.desiredBreak + "&sound=" + this.desiredSound; 
     }
   },
   computed: {
@@ -117,9 +120,12 @@ export default {
     var hour = params.get("hour");
     var minute = params.get("minute");
     this.Duration = params.get("duration");
-    if (this.Duration === 0) {
+    if (this.Duration === null) {
       this.noSprint = 1;
     }
+    else {
+
+    
     this.breakDuration = params.get("break");
     this.playSound = params.get("sound");
     var now = new Date();
@@ -131,13 +137,14 @@ export default {
     this.timeTillSprint = Math.floor((this.sprintStartTime - now) / 1000);
     this.timer = setInterval(() => this.countdownToSprint(), 1000);
     this.startAudio = new Audio(
-      "http://soundbible.com/mp3/Zen Temple Bell-SoundBible.com-2070036999.mp3"
+      "http://soundbible.com/mp3/Zen%20Temple%20Bell-SoundBible.com-2070036999.mp3"
     );
     this.startAudio.volume = 0.2;
     this.endAudio = new Audio(
       "http://soundbible.com/mp3/Metal_Gong-Dianakc-109711828.mp3"
     );
     this.endAudio.volume = 0.2;
+    }
   }
 };
 </script>
