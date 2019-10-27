@@ -43,7 +43,7 @@ export default {
       desiredMinute: 0,
       desiredDuration: 0,
       desiredBreak: 0,
-      desiredSound: 0,
+      desiredSound: false,
       customUrl: null
     };
   },
@@ -55,7 +55,7 @@ export default {
         this.timeTillSprint = 0;
         clearInterval(this.timer);
         var now = new Date();
-        if (now < this.sprintEndTime && this.playSound === 1) {
+        if (now < this.sprintEndTime && (this.playSound === "true")) {
           var playPromise = this.startAudio.play();
           if (playPromise !== null) {
             playPromise.catch(() => {
@@ -81,7 +81,7 @@ export default {
           this.sprintStartTime.getTime() + this.Duration * 60000
         );
         var now = new Date();
-        if (now < this.sprintEndTime && this.playSound === 1) {
+        if (now < this.sprintEndTime && (this.playSound === "true")) {
           var playPromise = this.endAudio.play();
           if (playPromise !== null) {
             playPromise.catch(() => {
