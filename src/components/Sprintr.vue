@@ -8,6 +8,20 @@
       <h3>Let the words flow!</h3>
       <h1>{{ sprintMinutes }}:{{ sprintSeconds }}</h1>
     </template>
+    <template v-else-if="noSprint = 1">
+      <div>Create a sprint with url arguments!</div>
+      <br>
+      <div>For example, this link will create a sprint with
+        <b>sound enabled</b> that
+        <b>starts at 13:30</b> and
+        <b>lasts 10 minutes</b> and
+        <b>repeats every 15 minutes</b>:
+      </div>
+      <a
+        href="https://word-sprintr.net?hour=13&minute=30&duration=10&break=15&sound=1"
+      >https://word-sprintr.net?<b>hour=13</b>&<b>minute=30</b>&<b>duration=10</b>&<b>break=15</b>&<b>sound=1</b>
+      </a>
+    </template>
     <template v-else>
       <h3>Loading...</h3>
     </template>
@@ -29,7 +43,8 @@ export default {
       Duration: 0,
       startAudio: null,
       endAudio: null,
-      playSound: 0
+      playSound: 0,
+      noSprint: 0
     };
   },
   methods: {
@@ -42,10 +57,11 @@ export default {
         var now = new Date();
         if (now < this.sprintEndTime && this.playSound) {
           var playPromise = this.startAudio.play();
-if (playPromise !== null){
-    playPromise.catch(() => { this.startAudio.play(); })
-}
-
+          if (playPromise !== null) {
+            playPromise.catch(() => {
+              this.startAudio.play();
+            });
+          }
         }
         this.sprintTime = Math.floor((this.sprintEndTime - now) / 1000);
         this.sprintTimer = setInterval(() => this.sprintCountDown(), 1000);
@@ -67,9 +83,11 @@ if (playPromise !== null){
         var now = new Date();
         if (now < this.sprintEndTime && this.playSound) {
           var playPromise = this.endAudio.play();
-if (playPromise !== null){
-    playPromise.catch(() => { this.endAudio.play(); })
-}
+          if (playPromise !== null) {
+            playPromise.catch(() => {
+              this.endAudio.play();
+            });
+          }
         }
         this.timeTillSprint = Math.floor((this.sprintStartTime - now) / 1000);
         this.timer = setInterval(() => this.countdownToSprint(), 1000);
@@ -99,6 +117,9 @@ if (playPromise !== null){
     var hour = params.get("hour");
     var minute = params.get("minute");
     this.Duration = params.get("duration");
+    if (this.Duration === 0) {
+      this.noSprint = 1;
+    }
     this.breakDuration = params.get("break");
     this.playSound = params.get("sound");
     var now = new Date();
