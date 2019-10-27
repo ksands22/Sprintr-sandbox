@@ -18,8 +18,8 @@
         <b>repeats every 15 minutes</b>:
       </div>
       <a
-        href="https://word-sprintr.net?hour=13&minute=30&duration=10&break=15&sound=1"
-      >https://word-sprintr.net?<b>hour=13</b>&<b>minute=30</b>&<b>duration=10</b>&<b>break=15</b>&<b>sound=1</b>
+        href="https://word-sprint.net?hour=13&minute=30&duration=10&break=15&sound=1"
+      >https://word-sprint.net?<b>hour=13</b>&<b>minute=30</b>&<b>duration=10</b>&<b>break=15</b>&<b>sound=1</b>
       </a>
     </template>
     <template v-else>
