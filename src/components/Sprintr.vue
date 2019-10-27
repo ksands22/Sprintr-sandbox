@@ -41,7 +41,11 @@ export default {
         clearInterval(this.timer);
         var now = new Date();
         if (now < this.sprintEndTime && this.playSound) {
-          this.startAudio.play();
+          var playPromise = this.startAudio.play();
+if (playPromise !== null){
+    playPromise.catch(() => { this.startAudio.play(); })
+}
+
         }
         this.sprintTime = Math.floor((this.sprintEndTime - now) / 1000);
         this.sprintTimer = setInterval(() => this.sprintCountDown(), 1000);
@@ -62,7 +66,10 @@ export default {
         );
         var now = new Date();
         if (now < this.sprintEndTime && this.playSound) {
-          this.endAudio.play();
+          var playPromise = this.endAudio.play();
+if (playPromise !== null){
+    playPromise.catch(() => { this.endAudio.play(); })
+}
         }
         this.timeTillSprint = Math.floor((this.sprintStartTime - now) / 1000);
         this.timer = setInterval(() => this.countdownToSprint(), 1000);
@@ -105,11 +112,11 @@ export default {
     this.startAudio = new Audio(
       "http://soundbible.com/mp3/Zen Temple Bell-SoundBible.com-2070036999.mp3"
     );
-    this.startAudio.volume = 0.8;
+    this.startAudio.volume = 0.2;
     this.endAudio = new Audio(
       "http://soundbible.com/mp3/Metal_Gong-Dianakc-109711828.mp3"
     );
-    this.endAudio.volume = 0.8;
+    this.endAudio.volume = 0.2;
   }
 };
 </script>
