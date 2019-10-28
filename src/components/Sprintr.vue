@@ -149,8 +149,8 @@ export default {
       var exampleDate = new Date(
         now.getTime() + 15 * 60000
       );
-      this.desiredHour = exampleDate.getHours();
-      this.desiredMinute = Math.ceil(exampleDate.getMinutes() / 10) * 10;
+      this.desiredHour = this.padTime(exampleDate.getHours());
+      this.desiredMinute = this.padTime(Math.floor(exampleDate.getMinutes() / 10) * 10);
       this.desiredDuration = 15;
       this.desiredBreak = 10;
     }
