@@ -52,12 +52,17 @@ export default {
   },
   methods: {
     countdownToSprint: function() {
+      // Break timer
+      // Recalculate time on every tick since setInterval is inaccurate
       var now = new Date();
       this.timeTillSprint = Math.floor((this.sprintStartTime - now) / 1000);
-      if (this.timeTillSprint >= 1) {
-      } else {
+      if (this.timeTillSprint < 1)  
+      {
+        // Timer is up
         this.timeTillSprint = 0;
         clearInterval(this.timer);
+
+        // Play start sound
         if (now < this.sprintEndTime && (this.playSound === "true")) {
           var playPromise = this.startAudio.play();
           if (playPromise !== null) {
@@ -66,25 +71,24 @@ export default {
             });
           }
         }
+
+        // Start sprint timer
         this.sprintTime = Math.floor((this.sprintEndTime - now) / 1000);
         this.sprintTimer = setInterval(() => this.sprintCountDown(), 500);
       }
     },
     sprintCountDown: function() {
+      // Timer for sprint itself
+      // Recalculate time on every tick since setInterval is inaccurate
       var now = new Date();
       this.sprintTime = Math.floor((this.sprintEndTime - now) / 1000);
-      if (this.sprintTime >= 1) {
-      } else {
+      if (this.sprintTime < 1) 
+      {
+        // Timer is up
         this.sprintTime = 0;
         clearInterval(this.sprintTimer);
-        //calculate next sprint
-        this.sprintStartTime = new Date(
-          this.sprintEndTime.getTime() + this.breakDuration * 60000
-        );
-        this.sprintEndTime = new Date(
-          this.sprintStartTime.getTime() + this.Duration * 60000
-        );
-        var now = new Date();
+
+        // Play end sound
         if (now < this.sprintEndTime && (this.playSound === "true")) {
           var playPromise = this.endAudio.play();
           if (playPromise !== null) {
@@ -93,6 +97,17 @@ export default {
             });
           }
         }
+
+        // Calculate next sprint
+        this.sprintStartTime = new Date(
+          this.sprintEndTime.getTime() + this.breakDuration * 60000
+        );
+        this.sprintEndTime = new Date(
+          this.sprintStartTime.getTime() + this.Duration * 60000
+        );
+
+        // Start break period and break timer
+        now = new Date();
         this.timeTillSprint = Math.floor((this.sprintStartTime - now) / 1000);
         this.timer = setInterval(() => this.countdownToSprint(), 500);
       }
@@ -101,6 +116,7 @@ export default {
       return (time < 10 ? "0" : "") + time;
     },
     getSprint: function() {
+      // Create sprint url from sprint builder
       window.location.href = "https://word-sprint.net?hour=" + this.desiredHour + "&minute=" + this.desiredMinute + "&duration=" + this.desiredDuration + "&break=" + this.desiredBreak + "&sound=" + this.desiredSound; 
     }
   },
@@ -119,27 +135,24 @@ export default {
     }
   },
   created: function() {
+    // Grab parameters from URL
     let uri = window.location.search.substring(1);
     let params = new URLSearchParams(uri);
-    var hour = params.get("hour");
-    var minute = params.get("minute");
     this.Duration = params.get("duration");
+
+    // If URL is empty, show builder
     if (this.Duration === null) {
       this.noSprint = 1;
     }
-    else {
-
-    
+    else 
+    {
+    // Otherwise, initialize more stuff
+    var hour = params.get("hour");
+    var minute = params.get("minute");
     this.breakDuration = params.get("break");
     this.playSound = params.get("sound");
-    var now = new Date();
-    this.sprintStartTime = new Date();
-    this.sprintStartTime.setHours(hour, minute, 0);
-    this.sprintEndTime = new Date(
-      this.sprintStartTime.getTime() + this.Duration * 60000
-    );
-    this.timeTillSprint = Math.floor((this.sprintStartTime - now) / 1000);
-    this.timer = setInterval(() => this.countdownToSprint(), 1000);
+
+    // Set up alert sounds
     this.startAudio = new Audio(
       "http://soundbible.com/mp3/Zen%20Temple%20Bell-SoundBible.com-2070036999.mp3"
     );
@@ -149,6 +162,18 @@ export default {
     );
     this.endAudio.volume = 0.2;
     }
+
+    // Calculate sprint start and end times for timers
+    var now = new Date();
+    this.sprintStartTime = new Date();
+    this.sprintStartTime.setHours(hour, minute, 0);
+    this.sprintEndTime = new Date(
+      this.sprintStartTime.getTime() + this.Duration * 60000
+    );
+    this.timeTillSprint = Math.floor((this.sprintStartTime - now) / 1000);
+    
+    // Start break timer
+    this.timer = setInterval(() => this.countdownToSprint(), 1000);
   }
 };
 </script>
