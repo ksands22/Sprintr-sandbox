@@ -143,6 +143,16 @@ export default {
     // If URL is empty, show builder
     if (this.Duration === null) {
       this.noSprint = 1;
+
+      // Set up example data
+      var now = new Date();
+      var exampleDate = new Date(
+        now.getTime() + 30 * 60000
+      );
+      this.desiredHour = exampleDate.getHours();
+      this.desiredMinute = exampleDate.getMinutes();
+      this.desiredDuration = 15;
+      this.desiredBreak = 10;
     }
     else 
     {
