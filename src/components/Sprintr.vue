@@ -147,10 +147,10 @@ export default {
       // Set up example data
       var now = new Date();
       var exampleDate = new Date(
-        now.getTime() + 30 * 60000
+        now.getTime() + 15 * 60000
       );
       this.desiredHour = exampleDate.getHours();
-      this.desiredMinute = exampleDate.getMinutes();
+      this.desiredMinute = Math.ceil(exampleDate.getMinutes() / 10) * 10;
       this.desiredDuration = 15;
       this.desiredBreak = 10;
     }
